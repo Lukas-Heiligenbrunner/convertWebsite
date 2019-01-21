@@ -48,29 +48,41 @@ if ($action == "spindown") {
   echo json_encode($info);
 
 }elseif ($action == "update") {
-
-  ob_implicit_flush(true);
-  ob_end_flush();
-
   $cmd = "sudo apt update";
+  echo shell_exec($cmd);
 
-  $descriptorspec = array(
-     0 => array("pipe", "r"),   // stdin is a pipe that the child will read from
-     1 => array("pipe", "w"),   // stdout is a pipe that the child will write to
-     2 => array("pipe", "w")    // stderr is a pipe that the child will write to
-  );
+}elseif ($action == "getdisks") {
+  $command = "lsblk | grep -c disk";
+  $disknumber = shell_exec($command);
 
 
-  $process = proc_open($cmd, $descriptorspec, $pipes, realpath('./'), array());
+  $data = array('disks' => array(),'parts' => array(),'raids' => array());
 
-  if (is_resource($process)) {
-
-      while ($s = fgets($pipes[1])) {
-          print $s;
-
-      }
+  //do for all devices
+  for ($i=1; $i <= $disknumber; $i++) {
+    $command = "lsblk | grep disk | head -n ".$i." | tail -n 1 | tr -s ' ' '\n'";
+    $temp = shell_exec($command);
+    $temparr = explode("\n",$temp);
+    $data['disks'][$i-1] = $temparr;
   }
 
+  $partnumber = shell_exec("lsblk -i| grep -c part");
+  //do for all devices
+  for ($i=1; $i <= $partnumber; $i++) {
+    $command = "lsblk -i| grep part | head -n ".$i." | tail -n 1 | cut -c 3- | tr -s ' ' '\n'";
+    $temp = shell_exec($command);
+    $temparr = explode("\n",$temp);
+    $data['parts'][$i-1] = $temparr;
+  }
+
+  $raidname = shell_exec("cat /proc/mdstat | grep active | tr -s ' ' '\n' | head -n 1");
+  $raidname = "/dev/".$raidname;
+
+  $data['raids'][0] = shell_exec("sudo mdadm --detail ".$raidname);
+
+  //lsblk -i| grep part | head -n 1 | tail -n 1 | cut -c 3- | tr -s ' ' '\n'
+
+  echo json_encode($data);
 }else {
   echo "wrong action";
 }

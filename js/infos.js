@@ -21,6 +21,12 @@ $(document).ready(function() {
 
   //on click listener
 
+  $.post('php/smartactions.php','action=getdisks',function(data){
+    var disks = JSON.parse(data);
+    console.log(disks);
+
+  },'text');
+
   $(".driveselect").click(function() {
     select($(this)[0].innerHTML);
   });
