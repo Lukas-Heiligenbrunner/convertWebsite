@@ -14,4 +14,5 @@ www-data ALL=(ALL) NOPASSWD: /bin/bash
 
 www-data ALL=(ALL) NOPASSWD: /dev/sda
 www-data ALL=(ALL) NOPASSWD: /dev/sdb
-www-data ALL=(ALL) NOPASSWD: /dev/sdc```
+www-data ALL=(ALL) NOPASSWD: /dev/sdc
+```
