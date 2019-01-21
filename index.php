@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <!-- Latest compiled and minified CSS -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+   <!-- jQuery library -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+   <!-- Popper JS -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+
+   <!-- Latest compiled JavaScript -->
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="js/infos.js"></script>
+
+
+    <title>Infopage</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="convert.php">Convertion</a>
+        </li>
+      </ul>
+    </nav>
+
+    <h1>Info</h1>
+
+    <div class="row content">
+      <div class="col-sm-3 sidenav">
+        <h1>Select your device:</h1>
+
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select drive
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item driveselect" href="#">sda</a></li>
+            <li><a class="dropdown-item driveselect" href="#">sdb</a></li>
+            <li><a class="dropdown-item driveselect" href="#">sdc</a></li>
+            <li><a class="dropdown-item driveselect" href="#">sdd</a></li>
+            <li><a class="dropdown-item driveselect" href="#">sde</a></li>
+          </ul>
+         </div>
+
+         <div id="selection"></div>
+         <br>
+
+         <button id="btnspindown" class="btn btn-warning">spin down</button>
+         <button id="btnspinup" class="btn btn-info">spin up</button>
+         <br><br>
+         Request some information:<br>
+         <button id="btngethealth" class="btn btn-info">Health state</button>
+         <button id="btngetallinfo" class="btn btn-info">All information</button><br><br>
+         <button id="btngethtop" class="btn btn-info">Htop</button>
+         <button id="btnupdate" class="btn btn-info">Update</button>
+
+          <br>
+         <div id="loadingscreen"></div>
+
+         <div id="cpugraph"></div>
+
+
+      </div>
+      <div class="col-sm-3 text-left">
+        <h1>General Info:</h1>
+        Power modes:
+        <div id="powerstates">
+         <div id="/dev/sda"></div>
+         <div id="/dev/sdb"></div>
+         <div id="/dev/sdc"></div>
+         <div id="/dev/sdd"></div>
+         <div id="/dev/sde"></div>
+        </div>
+        <br>
+        lsblk:
+        <div id="lsblk"></div>
+        <div id="df"></div>
+        <div id="datachart"></div>
+
+      </div>
+      <div class="col-sm-6 sidenav">
+        <h1>Requested Info:</h1>
+        <button class="btn btn-warning" data-toggle="collapse" data-target="#infospace">Hide Data</button>
+        <div id="infospace" class="collapse show">
+        </div>
+      </div>
+
+
+
+       </div>
+  </body>
+</html>
