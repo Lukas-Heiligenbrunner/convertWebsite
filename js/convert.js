@@ -5,6 +5,8 @@ $(document).ready(function() {
   var finishedtime = 0;
   var currenttime;
 
+  var temp = 0;
+
   var percent;
   var percenttot;
 
