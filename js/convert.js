@@ -17,34 +17,27 @@ $(document).ready(function() {
 function getstartinfo() {
 
   $.post('php/convertactions.php','action=startinfo',function(data){
+    console.log(JSON.parse(data));
+    var startdata = JSON.parse(data);
 
-
-    var arr = data.split(";");
-    arr[0]=arr[0].substring(0,arr[0].length-2);
-    totaltimeofcurr = timetoseconds(arr[0]);
-    var totalarr = arr[1].split(",\n");
-    totalarr.splice(-1);
+    totaltimeofcurr = timetoseconds(startdata.currentprogress.duration);
 
     totaltime=0;
-    for(var i=0;i<totalarr.length;i++) {
-      totaltime+=timetoseconds(totalarr[i]);
+    console.log(startdata.allfiles.length);
+    for(var i=0;i<startdata.allfiles.length;i++) {
+      totaltime+=timetoseconds(startdata.allfiles[i].duration);
+      console.log("forloop"+timetoseconds(startdata.allfiles[i].duration));
     }
-
-    var finished = arr[2].split(",\n");
-    finished.splice(-1);
-    //console.log(finished);
+    console.log(totaltime);
 
     finishedtime=0;
-    for(var i=0;i<finished.length;i++) {
-      finishedtime+=timetoseconds(finished[i]);
+    for(var i=0;i<startdata.finishedfiles.length;i++) {
+      finishedtime+=timetoseconds(startdata.finishedfiles[i].duration);
     }
+    console.log(finishedtime);
 
-    var currname = arr[3];
-    currname=currname.substring(1,currname.length-3);
+    var currname = startdata.currentprogress.filename;
     $('#currfile')[0].innerHTML="now converting: "+currname;
-    //console.log(currname);
-//console.log(arr);
-//console.log(totalarr);
 
   },'text');
 
@@ -77,8 +70,8 @@ var lastpercent=0;
 
 
     }else {
-        percent = 100;
-        percenttot = 100;
+        //percent = 100;
+        //percenttot = 100;
     }
 
     $("#progbar")[0].innerHTML = percent+"%";
