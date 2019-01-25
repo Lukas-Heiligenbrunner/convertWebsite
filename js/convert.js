@@ -63,6 +63,8 @@ var lastpercent=0;
 
         $("#totalprogbar")[0].innerHTML = percenttot+"%";
         $("#totalprogbar")[0].style.width = percenttot+"%";
+      }else {
+        $('#currfile')[0].innerHTML="Finished converting!!!";
       }
     },'text');
   }
@@ -91,10 +93,6 @@ var lastpercent=0;
     $.post('php/convertactions.php','action=shutdown',function(data){
       console.log(data);
     },'text');
-  });
-
-  $('#btnreload').click(function() {
-
   });
 
   async function startinfoafterstart() {
