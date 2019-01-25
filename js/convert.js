@@ -70,8 +70,12 @@ var lastpercent=0;
   }
 
   $('#btnshowvids').click(function() {
-    $.post('php/convertactions.php','action=showvids',function(data){
-      $('.outputcontainer')[0].innerHTML = data;
+    $.post('php/convertactions.php','action=startinfo',function(data){
+      var startdata = JSON.parse(data);
+      for (var i in startdata.allfiles) {
+        $('.outputcontainer')[0].innerHTML += "<br>Filename: "+startdata.allfiles[i].filename+" | Filesize: "+startdata.allfiles[i].size+" Bytes | Duration:"+startdata.allfiles[i].duration+"</td></tr>";
+      }
+
     },'text');
   });
 

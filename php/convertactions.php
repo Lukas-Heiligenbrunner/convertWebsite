@@ -21,10 +21,6 @@ if ($action == "reloadinfo") {
     $temp = $temp[1];
     $data['filename'] = $temp;
   }
-  // if($info == ""){
-  //   echo "no file";
-  // }
-  // echo $info;
   echo json_encode($data);
 } elseif ($action == "startinfo") {
 
@@ -75,27 +71,6 @@ if ($action == "reloadinfo") {
   }
 
 echo json_encode($data);
-} elseif ($action == "showvids") {
-  $command = <<<'EOD'
-  cd ../videos
-  for file in *.ts
-  do
-  du -h $file
-  done
-EOD;
-  $info = shell_exec($command);
-  echo $info;
-}elseif ($action == "gettotaltime") {
-  $command = <<<'EOD'
-  cd ../videos
-  for file in *.ts
-  do
-  ffmpeg -i $file -hide_banner 2>&1 | grep Duration | tr -s ' ' '\n' | head -n 3 | tail -n 1
-  done
-EOD;
-
-  $info = shell_exec($command);
-  echo $info;
 }elseif ($action == "startconv") {
   $info = shell_exec("cd ../scripts; sudo screen -S convertssss -dm bash convert.sh");
   echo "convertion started";
@@ -108,6 +83,4 @@ EOD;
 } else {
   echo "wrong action";
 }
-
-
- ?>
+?>

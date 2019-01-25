@@ -50,9 +50,9 @@
      <div id="totalprogbar" class="progress-bar" style="width:0%">0%</div>
     </div>
     <br>
-    <pre class="outputcontainer">
+    <div class="outputcontainer">
 
-    </pre>
+    </div>
 
   </body>
 </html>
