@@ -42,14 +42,12 @@ var lastpercent=0;
   function reloadinfo() {
     $.post('php/convertactions.php','action=reloadinfo',function(data){
       var reloaddata = JSON.parse(data);
-      console.log(reloaddata);
 
       if (reloaddata.duration != "") {
+        percent=0;
         currenttime = timetoseconds(reloaddata.duration);
         percent = currenttime/totaltimeofcurr*100;
-        percent*=100;
-        percent=Math.round(percent);
-        percent/=100;
+        percent=Math.round(percent*100)/100;
 
         if(lastpercent > percent)
         {
@@ -58,9 +56,7 @@ var lastpercent=0;
         lastpercent=percent;
 
         percenttot = (currenttime+finishedtime)/totaltime*100;
-        percenttot*=100;
-        percenttot=Math.round(percenttot);
-        percenttot/=100;
+        percenttot=Math.round(percenttot*100)/100;
 
         $("#progbar")[0].innerHTML = percent+"%";
         $("#progbar")[0].style.width = percent+"%";
@@ -80,8 +76,9 @@ var lastpercent=0;
   $('#btnstartconv').click(function() {
     $.post('php/convertactions.php','action=startconv',function(data){
       console.log(data);
+      lastpercent=0;
+      startinfoafterstart();
     },'text');
-    getstartinfo();
   });
 
   $('#btnstopconv').click(function() {
@@ -95,6 +92,20 @@ var lastpercent=0;
       console.log(data);
     },'text');
   });
+
+  $('#btnreload').click(function() {
+
+  });
+
+  async function startinfoafterstart() {
+    console.log('waiting 2 secs until getting data');
+    await sleep(2000);
+    getstartinfo();
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
 
   function timetoseconds(mytime) {

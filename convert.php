@@ -36,6 +36,7 @@
     <button id="btnstartconv" class="btn btn-info">start converting</button>
     <button id="btnstopconv" class="btn btn-danger">STOP converting</button>
     <button id="btnshutdown" class="btn btn-danger">Shutdown PC</button>
+    <button id="btnreload" class="btn btn-danger">reloaddings</button>
     <br><br>
     <div id="currfile">
 
