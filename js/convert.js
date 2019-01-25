@@ -17,24 +17,19 @@ $(document).ready(function() {
 function getstartinfo() {
 
   $.post('php/convertactions.php','action=startinfo',function(data){
-    console.log(JSON.parse(data));
     var startdata = JSON.parse(data);
 
     totaltimeofcurr = timetoseconds(startdata.currentprogress.duration);
 
     totaltime=0;
-    console.log(startdata.allfiles.length);
     for(var i=0;i<startdata.allfiles.length;i++) {
       totaltime+=timetoseconds(startdata.allfiles[i].duration);
-      console.log("forloop"+timetoseconds(startdata.allfiles[i].duration));
     }
-    console.log(totaltime);
 
     finishedtime=0;
     for(var i=0;i<startdata.finishedfiles.length;i++) {
       finishedtime+=timetoseconds(startdata.finishedfiles[i].duration);
     }
-    console.log(finishedtime);
 
     var currname = startdata.currentprogress.filename;
     $('#currfile')[0].innerHTML="now converting: "+currname;
@@ -46,39 +41,33 @@ function getstartinfo() {
 var lastpercent=0;
   function reloadinfo() {
     $.post('php/convertactions.php','action=reloadinfo',function(data){
+      var reloaddata = JSON.parse(data);
+      console.log(reloaddata);
 
-      var index = data.indexOf("time=");
+      if (reloaddata.duration != "") {
+        currenttime = timetoseconds(reloaddata.duration);
+        percent = currenttime/totaltimeofcurr*100;
+        percent*=100;
+        percent=Math.round(percent);
+        percent/=100;
 
-      if(index != -1)
-      {
-      currenttime = timetoseconds(data.slice(index+5, index+16));
-      percent = currenttime/totaltimeofcurr*100;
-      percent*=100;
-      percent=Math.round(percent);
-      percent/=100;
+        if(lastpercent > percent)
+        {
+          getstartinfo();
+        }
+        lastpercent=percent;
 
-      if(lastpercent > percent)
-      {
-        getstartinfo();
+        percenttot = (currenttime+finishedtime)/totaltime*100;
+        percenttot*=100;
+        percenttot=Math.round(percenttot);
+        percenttot/=100;
+
+        $("#progbar")[0].innerHTML = percent+"%";
+        $("#progbar")[0].style.width = percent+"%";
+
+        $("#totalprogbar")[0].innerHTML = percenttot+"%";
+        $("#totalprogbar")[0].style.width = percenttot+"%";
       }
-      lastpercent=percent;
-
-      percenttot = (currenttime+finishedtime)/totaltime*100;
-      percenttot*=100;
-      percenttot=Math.round(percenttot);
-      percenttot/=100;
-
-
-    }else {
-        //percent = 100;
-        //percenttot = 100;
-    }
-
-    $("#progbar")[0].innerHTML = percent+"%";
-    $("#progbar")[0].style.width = percent+"%";
-
-    $("#totalprogbar")[0].innerHTML = percenttot+"%";
-    $("#totalprogbar")[0].style.width = percenttot+"%";
     },'text');
   }
 

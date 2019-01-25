@@ -2,12 +2,30 @@
 $action = $_POST['action'];
 
 if ($action == "reloadinfo") {
-  $info = shell_exec('cat ../scripts/output.txt | tail -c 100');
-  if($info == ""){
-    echo "no file";
-  }
-  echo $info;
+  $data = array('finished' => 0,'filename' => "", 'duration' => 0);
 
+  $info = shell_exec('cat ../scripts/output.txt | tail -c 2');
+  if ($info == 6) {
+    //convertion finished
+    $data['finished'] = TRUE;
+  }else {
+    //convertion running
+    $data['finished'] = FALSE;
+
+    $temp = shell_exec("cat ../scripts/output.txt | tail -c 100 | tr -s ' ' '\n' | grep time | tr -s '=' '\n' | tail -n 1");
+    $temp = explode("\n",$temp)[0];
+    $data['duration'] = $temp;
+
+    $temp = shell_exec("cat ../scripts/output.txt | grep Input | tr -s ' ' '\n' | tail -n 1");
+    $temp = explode("'",$temp);
+    $temp = $temp[1];
+    $data['filename'] = $temp;
+  }
+  // if($info == ""){
+  //   echo "no file";
+  // }
+  // echo $info;
+  echo json_encode($data);
 } elseif ($action == "startinfo") {
 
   $data = array('currentprogress' => array('filename' => "",'size' => 0, 'duration' => 0), 'allfiles' => [], 'finishedfiles' => []);
@@ -35,7 +53,7 @@ if ($action == "reloadinfo") {
       $i = "../videos/".$i;
 
       $duration = shell_exec("ffmpeg -i $i -hide_banner 2>&1 | grep Duration | tr -s ' ' '\n' | head -n 3 | tail -n 1");
-      $duration = explode('.',$duration)[0];
+      $duration = explode(',',$duration)[0];
 
       array_push($data['allfiles'],array('filename' => $i, 'size'=> filesize($i), 'duration' => $duration));
     }
@@ -51,7 +69,7 @@ if ($action == "reloadinfo") {
 
   foreach ($finishedvideos as $i) {
     $duration = shell_exec("ffmpeg -i $i -hide_banner 2>&1 | grep Duration | tr -s ' ' '\n' | head -n 3 | tail -n 1");
-    $duration = explode('.',$duration)[0];
+    $duration = explode(',',$duration)[0];
 
     array_push($data['finishedfiles'],array('filename' => $i, 'size'=> filesize($i), 'duration' => $duration));
   }
