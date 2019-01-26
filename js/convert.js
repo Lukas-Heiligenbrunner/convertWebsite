@@ -18,6 +18,7 @@ function getstartinfo() {
 
   $.post('php/convertactions.php','action=startinfo',function(data){
     var startdata = JSON.parse(data);
+    console.log(startdata);
 
     totaltimeofcurr = timetoseconds(startdata.currentprogress.duration);
 
@@ -42,7 +43,19 @@ var lastpercent=0;
   function reloadinfo() {
     $.post('php/convertactions.php','action=reloadinfo',function(data){
       var reloaddata = JSON.parse(data);
+      console.log(reloaddata);
 
+      if (reloaddata.finishedall) {
+        console.log("finished converting");
+        $('#currfile')[0].innerHTML="convertion finished";
+
+      }else if (reloaddata.finishedcurr) {
+        console.log("finished curr");
+        $('#currfile')[0].innerHTML="starting new file to convert";
+      }else {
+        console.log("convertion running");
+        $('#currfile')[0].innerHTML="active converting: "+ reloaddata.filename;
+      }
       if (reloaddata.duration != "") {
         percent=0;
         currenttime = timetoseconds(reloaddata.duration);
@@ -63,8 +76,6 @@ var lastpercent=0;
 
         $("#totalprogbar")[0].innerHTML = percenttot+"%";
         $("#totalprogbar")[0].style.width = percenttot+"%";
-      }else {
-        $('#currfile')[0].innerHTML="Finished converting!!!";
       }
     },'text');
   }

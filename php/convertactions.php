@@ -2,24 +2,30 @@
 $action = $_POST['action'];
 
 if ($action == "reloadinfo") {
-  $data = array('finished' => 0,'filename' => "", 'duration' => 0);
+  $data = array('finishedall' => 0,'finishedcurr' => 0,'filename' => "", 'duration' => 0);
 
-  $info = shell_exec('cat ../scripts/output.txt | tail -c 2');
-  if ($info == 6) {
-    //convertion finished
-    $data['finished'] = TRUE;
+  if (filesize("../scripts/output.txt")) { //check if output.txt file exists
+    $info = shell_exec('cat ../scripts/output.txt | grep speed');
+    if ($info == "") {
+      //convertion finished
+      $data['finishedcurr'] = TRUE;
+      $data['finishedall'] = FALSE;
+    }else {
+      //convertion running
+      $data['finishedcurr'] = FALSE;
+      $data['finishedall'] = FALSE;
+
+      $temp = shell_exec("cat ../scripts/output.txt | grep speed | tr -s ' ' '\n' | grep time | tr -s '=' '\n' | tail -n 1");
+      $temp = explode("\n",$temp)[0];
+      $data['duration'] = $temp;
+
+      $temp = shell_exec("cat ../scripts/output.txt | grep Input | tr -s ' ' '\n' | tail -n 1");
+      $temp = explode("'",$temp);
+      $temp = $temp[1];
+      $data['filename'] = $temp;
+    }
   }else {
-    //convertion running
-    $data['finished'] = FALSE;
-
-    $temp = shell_exec("cat ../scripts/output.txt | tail -c 100 | tr -s ' ' '\n' | grep time | tr -s '=' '\n' | tail -n 1");
-    $temp = explode("\n",$temp)[0];
-    $data['duration'] = $temp;
-
-    $temp = shell_exec("cat ../scripts/output.txt | grep Input | tr -s ' ' '\n' | tail -n 1");
-    $temp = explode("'",$temp);
-    $temp = $temp[1];
-    $data['filename'] = $temp;
+    $data['finishedall'] = TRUE;
   }
   echo json_encode($data);
 } elseif ($action == "startinfo") {
