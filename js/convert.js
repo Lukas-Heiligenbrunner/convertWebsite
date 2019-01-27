@@ -51,10 +51,7 @@ var lastpercent=0;
         $('#currfile')[0].innerHTML="starting new file to convert";
       }else {
         $('#currfile')[0].innerHTML="active converting: "+ reloaddata.filename;
-      }
 
-      
-      if (reloaddata.duration != "") {
         percent=0;
         currenttime = timetoseconds(reloaddata.duration);
         percent = currenttime/totaltimeofcurr*100;
