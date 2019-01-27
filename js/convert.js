@@ -51,6 +51,12 @@ var lastpercent=0;
       if (reloaddata.finishedall) {
         $('#currfile')[0].innerHTML="convertion finished";
 
+        setPercentCurr(100);
+        setPercentTotal(100);
+
+
+        getstartinfo();
+
       }else if (reloaddata.finishedcurr) {
         $('#currfile')[0].innerHTML="starting new file to convert";
       }else {
@@ -70,13 +76,20 @@ var lastpercent=0;
         percenttot = (currenttime+finishedtime)/totaltime*100;
         percenttot=Math.round(percenttot*100)/100;
 
-        $("#progbar")[0].innerHTML = percent+"%";
-        $("#progbar")[0].style.width = percent+"%";
-
-        $("#totalprogbar")[0].innerHTML = percenttot+"%";
-        $("#totalprogbar")[0].style.width = percenttot+"%";
+        setPercentCurr(percent);
+        setPercentTotal(percenttot);
       }
     },'text');
+  }
+
+  function setPercentTotal(percent) {
+    $("#totalprogbar")[0].innerHTML = percent+"%";
+    $("#totalprogbar")[0].style.width = percent+"%";
+  }
+
+  function setPercentCurr(percent) {
+    $("#progbar")[0].innerHTML = percent+"%";
+    $("#progbar")[0].style.width = percent+"%";
   }
 
   $('#btnshowvids').click(function() {
