@@ -43,17 +43,13 @@ var lastpercent=0;
   function reloadinfo() {
     $.post('php/convertactions.php','action=reloadinfo',function(data){
       var reloaddata = JSON.parse(data);
-      console.log(reloaddata);
 
       if (reloaddata.finishedall) {
-        console.log("finished converting");
         $('#currfile')[0].innerHTML="convertion finished";
 
       }else if (reloaddata.finishedcurr) {
-        console.log("finished curr");
         $('#currfile')[0].innerHTML="starting new file to convert";
       }else {
-        console.log("convertion running");
         $('#currfile')[0].innerHTML="active converting: "+ reloaddata.filename;
       }
 
