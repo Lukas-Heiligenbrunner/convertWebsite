@@ -61,19 +61,23 @@ if ($action == "reloadinfo") {
     }
   }
 
-  $myfile = fopen("../scripts/finished.txt", "r") or die("Unable to open file!");
-  $finishedvideos = fread($myfile,filesize("../scripts/finished.txt"));
-  fclose($myfile);
+  if ($myfile = fopen("../scripts/finished.txt", "r")) {
+    $finishedvideos = fread($myfile,filesize("../scripts/finished.txt"));
+    fclose($myfile);
 
-  $finishedvideos = explode("\n",$finishedvideos);
-  array_shift($finishedvideos);
-  array_pop($finishedvideos);
+    $finishedvideos = explode("\n",$finishedvideos);
+    array_shift($finishedvideos);
+    array_pop($finishedvideos);
 
-  foreach ($finishedvideos as $i) {
-    $duration = shell_exec("ffmpeg -i $i -hide_banner 2>&1 | grep Duration | tr -s ' ' '\n' | head -n 3 | tail -n 1");
-    $duration = explode(',',$duration)[0];
+    foreach ($finishedvideos as $i) {
+      $duration = shell_exec("ffmpeg -i $i -hide_banner 2>&1 | grep Duration | tr -s ' ' '\n' | head -n 3 | tail -n 1");
+      $duration = explode(',',$duration)[0];
 
-    array_push($data['finishedfiles'],array('filename' => $i, 'size'=> filesize($i), 'duration' => $duration));
+      array_push($data['finishedfiles'],array('filename' => $i, 'size'=> filesize($i), 'duration' => $duration));
+    }
+
+  }else {
+    $data['finishedfiles'] = FALSE;
   }
 
 echo json_encode($data);

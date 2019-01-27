@@ -23,17 +23,21 @@ function getstartinfo() {
     totaltimeofcurr = timetoseconds(startdata.currentprogress.duration);
 
     totaltime=0;
+    $('.convertionprogressnames')[0].innerHTML = "";
     for(var i=0;i<startdata.allfiles.length;i++) {
       totaltime+=timetoseconds(startdata.allfiles[i].duration);
+
+      if ((JSON.stringify(startdata.finishedfiles)).includes(JSON.stringify(startdata.allfiles[i]))) {
+        $('.convertionprogressnames')[0].innerHTML += "<div>"+"✅  "+startdata.finishedfiles[i].filename+"</div>";
+      }else {
+        $('.convertionprogressnames')[0].innerHTML += "<div>"+"🗷   "+startdata.allfiles[i].filename+"</div>";
+      }
     }
 
     finishedtime=0;
     for(var i=0;i<startdata.finishedfiles.length;i++) {
       finishedtime+=timetoseconds(startdata.finishedfiles[i].duration);
     }
-
-    var currname = startdata.currentprogress.filename;
-    $('#currfile')[0].innerHTML="now converting: "+currname;
 
   },'text');
 
