@@ -56,6 +56,8 @@ var lastpercent=0;
         console.log("convertion running");
         $('#currfile')[0].innerHTML="active converting: "+ reloaddata.filename;
       }
+
+      
       if (reloaddata.duration != "") {
         percent=0;
         currenttime = timetoseconds(reloaddata.duration);
